@@ -10,7 +10,7 @@ public class IntegrationDbContext :
     public DbSet<WithMisNamedQueryChildEntity> WithMisNamedQueryChildEntities { get; set; } = null!;
     public DbSet<WithMisNamedQueryParentEntity> WithMisNamedQueryParentEntities { get; set; } = null!;
     public DbSet<Level1Entity> Level1Entities { get; set; } = null!;
-    public DbSet<Level2Entity> Level2Entities { get; set; } = null!;
+    public DbSet<IncludeNonQueryableA> Level2Entities { get; set; } = null!;
     public DbSet<CustomTypeEntity> CustomTypeEntities { get; set; } = null!;
     public DbSet<WithNullableEntity> WithNullableEntities { get; set; } = null!;
     public DbSet<NamedIdEntity> NamedEntities { get; set; } = null!;
@@ -39,9 +39,9 @@ public class IntegrationDbContext :
         modelBuilder.Entity<WithMisNamedQueryParentEntity>();
         modelBuilder.Entity<WithMisNamedQueryChildEntity>();
         modelBuilder.Entity<Level1Entity>();
-        modelBuilder.Entity<Level2Entity>()
+        modelBuilder.Entity<IncludeNonQueryableA>()
             .HasOne(p => p.Level1Entity)
-            .WithOne(i => i.Level2Entity)
+            .WithOne(i => i.IncludeNonQueryableA)
             .HasForeignKey<Level1Entity>(b => b.Level2EntityId);
         modelBuilder.Entity<WithManyChildrenEntity>();
         modelBuilder.Entity<Child1Entity>();

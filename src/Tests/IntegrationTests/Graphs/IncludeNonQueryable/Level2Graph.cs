@@ -1,7 +1,7 @@
 ﻿using GraphQL.EntityFramework;
 
 public class Level2Graph :
-    EfObjectGraphType<IntegrationDbContext, Level2Entity>
+    EfObjectGraphType<IntegrationDbContext, IncludeNonQueryableA>
 {
     public Level2Graph(IEfGraphQLService<IntegrationDbContext> graphQlService) :
         base(graphQlService)

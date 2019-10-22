@@ -27,7 +27,7 @@ public partial class IntegrationTests :
         GraphTypeTypeRegistry.Register<ChildEntity, ChildGraph>();
         GraphTypeTypeRegistry.Register<ParentEntity, ParentGraph>();
         GraphTypeTypeRegistry.Register<Level1Entity, Level1Graph>();
-        GraphTypeTypeRegistry.Register<Level2Entity, Level2Graph>();
+        GraphTypeTypeRegistry.Register<IncludeNonQueryableA, Level2Graph>();
         GraphTypeTypeRegistry.Register<WithMisNamedQueryParentEntity, WithMisNamedQueryParentGraph>();
         GraphTypeTypeRegistry.Register<WithNullableEntity, WithNullableGraph>();
         GraphTypeTypeRegistry.Register<NamedIdEntity, NamedIdGraph>();
@@ -924,12 +924,12 @@ query ($id: String!)
   }
 }";
 
-        var level2 = new Level2Entity();
+        var level2 = new IncludeNonQueryableA();
         var level1 = new Level1Entity
         {
-            Level2Entity = level2,
+            IncludeNonQueryableA = level2,
         };
-        level1.Level2Entity = level2;
+        level1.IncludeNonQueryableA = level2;
 
         await using var database = await sqlInstance.Build();
         var result = await RunQuery(database, query, null, null, level1, level2);

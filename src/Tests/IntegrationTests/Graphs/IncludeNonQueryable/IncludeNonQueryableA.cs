@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class Level2Entity
+public class IncludeNonQueryableA
 {
     public Guid Id { get; set; } = XunitLogging.Context.NextGuid();
     public Guid Level1EntityId { get; set; }

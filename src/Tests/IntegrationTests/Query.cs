@@ -20,7 +20,7 @@ public class Query :
             {
                 var dataContext = context.DbContext;
                 return dataContext.Level1Entities.AsQueryable()
-                    .Select(p => p.Level2Entity);
+                    .Select(p => p.IncludeNonQueryableA);
             });
         AddQueryField(
             name: "level1Entities",
