@@ -10,9 +10,8 @@ public class IntegrationDbContext :
     public DbSet<WithMisNamedQueryChildEntity> WithMisNamedQueryChildEntities { get; set; } = null!;
     public DbSet<WithMisNamedQueryParentEntity> WithMisNamedQueryParentEntities { get; set; } = null!;
     public DbSet<Level1Entity> Level1Entities { get; set; } = null!;
-    public DbSet<CustomTypeEntity> CustomTypeEntities { get; set; } = null!;
     public DbSet<Level2Entity> Level2Entities { get; set; } = null!;
-    public DbSet<Level3Entity> Level3Entities { get; set; } = null!;
+    public DbSet<CustomTypeEntity> CustomTypeEntities { get; set; } = null!;
     public DbSet<WithNullableEntity> WithNullableEntities { get; set; } = null!;
     public DbSet<NamedIdEntity> NamedEntities { get; set; } = null!;
     public DbSet<WithManyChildrenEntity> WithManyChildrenEntities { get; set; } = null!;
@@ -44,10 +43,6 @@ public class IntegrationDbContext :
             .HasOne(p => p.Level1Entity)
             .WithOne(i => i.Level2Entity)
             .HasForeignKey<Level1Entity>(b => b.Level2EntityId);
-        modelBuilder.Entity<Level3Entity>()
-            .HasOne(p => p.Level2Entity)
-            .WithOne(i => i.Level3Entity)
-            .HasForeignKey<Level2Entity>(b => b.Level3EntityId);
         modelBuilder.Entity<WithManyChildrenEntity>();
         modelBuilder.Entity<Child1Entity>();
         modelBuilder.Entity<NamedIdEntity>();

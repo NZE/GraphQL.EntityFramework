@@ -8,7 +8,7 @@ public class Level2Graph :
     {
         Field(x => x.Id);
         AddNavigationField(
-            name: "level3Entity",
-            resolve: context => context.Source.Level3Entity);
+            name: "level1Entity",
+            resolve: context => context.Source.Level1Entity);
     }
 }

@@ -28,7 +28,6 @@ public partial class IntegrationTests :
         GraphTypeTypeRegistry.Register<ParentEntity, ParentGraph>();
         GraphTypeTypeRegistry.Register<Level1Entity, Level1Graph>();
         GraphTypeTypeRegistry.Register<Level2Entity, Level2Graph>();
-        GraphTypeTypeRegistry.Register<Level3Entity, Level3Graph>();
         GraphTypeTypeRegistry.Register<WithMisNamedQueryParentEntity, WithMisNamedQueryParentGraph>();
         GraphTypeTypeRegistry.Register<WithNullableEntity, WithNullableGraph>();
         GraphTypeTypeRegistry.Register<NamedIdEntity, NamedIdGraph>();
@@ -912,148 +911,28 @@ query ($id: String!)
     }
 
     [Fact]
-    public async Task Skip_level()
-    {
-        var query = @"
-{
-  skipLevel
-  {
-    level3Entity
-    {
-      property
-    }
-  }
-}";
-
-        var level3 = new Level3Entity
-        {
-            Property = "Value"
-        };
-        var level2 = new Level2Entity
-        {
-            Level3Entity = level3
-        };
-        var level1 = new Level1Entity
-        {
-            Level2Entity = level2
-        };
-
-        var database = await sqlInstance.Build();
-        var result = await RunQuery(database, query, null, null, level1, level2, level3);
-        ObjectApprover.Verify(result);
-    }
-
-    [Fact]
     public async Task Multiple_nested_AddQueryField()
     {
         var query = @"
 {
-  level1Entities
+  includeNonQueryable
   {
-    level2EntityQuery
+    level1Entity
     {
-      level3Entity
-      {
-        property
-      }
+      id
     }
   }
 }";
 
-        var level3 = new Level3Entity
-        {
-            Property = "Value"
-        };
-        var level2 = new Level2Entity
-        {
-            Level3Entity = level3
-        };
+        var level2 = new Level2Entity();
         var level1 = new Level1Entity
         {
-            Level2Entity = level2
+            Level2Entity = level2,
         };
+        level1.Level2Entity = level2;
 
         await using var database = await sqlInstance.Build();
-        var result = await RunQuery(database, query, null, null, level1, level2, level3);
-        ObjectApprover.Verify(result);
-    }
-    [Fact]
-    public async Task Multiple_nested()
-    {
-        var query = @"
-{
-  level1Entities
-  {
-    level2Entity
-    {
-      level3Entity
-      {
-        property
-      }
-    }
-  }
-}";
-
-        var level3 = new Level3Entity
-        {
-            Property = "Value"
-        };
-        var level2 = new Level2Entity
-        {
-            Level3Entity = level3
-        };
-        var level1 = new Level1Entity
-        {
-            Level2Entity = level2
-        };
-
-        await using var database = await sqlInstance.Build();
-        var result = await RunQuery(database, query, null, null, level1, level2, level3);
-        ObjectApprover.Verify(result);
-    }
-
-    [Fact]
-    public async Task Null_on_nested()
-    {
-        var query = @"
-{
-  level1Entities(where: {path: 'Level2Entity.Level3EntityId', comparison: 'equal', value: '00000000-0000-0000-0000-000000000003'})
-  {
-    level2Entity
-    {
-      level3Entity
-      {
-        property
-      }
-    }
-  }
-}";
-
-        var level3a = new Level3Entity
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
-            Property = "Valuea"
-        };
-        var level2a = new Level2Entity
-        {
-            Level3Entity = level3a
-        };
-        level3a.Level2Entity = level2a;
-        var level1a = new Level1Entity
-        {
-            Level2Entity = level2a
-        };
-        level2a.Level1Entity = level1a;
-
-        var level2b = new Level2Entity();
-        var level1b = new Level1Entity
-        {
-            Level2Entity = level2b
-        };
-        level2b.Level1Entity = level1b;
-
-        await using var database = await sqlInstance.Build();
-        var result = await RunQuery(database, query, null, null, level1b, level2b, level1a, level2a, level3a);
+        var result = await RunQuery(database, query, null, null, level1, level2);
         ObjectApprover.Verify(result);
     }
 
