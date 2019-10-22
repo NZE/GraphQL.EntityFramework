@@ -944,6 +944,40 @@ query ($id: String!)
     }
 
     [Fact]
+    public async Task Multiple_nested_AddQueryField()
+    {
+        var query = @"
+{
+  level1Entities
+  {
+    level2EntityQuery
+    {
+      level3Entity
+      {
+        property
+      }
+    }
+  }
+}";
+
+        var level3 = new Level3Entity
+        {
+            Property = "Value"
+        };
+        var level2 = new Level2Entity
+        {
+            Level3Entity = level3
+        };
+        var level1 = new Level1Entity
+        {
+            Level2Entity = level2
+        };
+
+        await using var database = await sqlInstance.Build();
+        var result = await RunQuery(database, query, null, null, level1, level2, level3);
+        ObjectApprover.Verify(result);
+    }
+    [Fact]
     public async Task Multiple_nested()
     {
         var query = @"
@@ -1004,16 +1038,19 @@ query ($id: String!)
         {
             Level3Entity = level3a
         };
+        level3a.Level2Entity = level2a;
         var level1a = new Level1Entity
         {
             Level2Entity = level2a
         };
+        level2a.Level1Entity = level1a;
 
         var level2b = new Level2Entity();
         var level1b = new Level1Entity
         {
             Level2Entity = level2b
         };
+        level2b.Level1Entity = level1b;
 
         await using var database = await sqlInstance.Build();
         var result = await RunQuery(database, query, null, null, level1b, level2b, level1a, level2a, level3a);

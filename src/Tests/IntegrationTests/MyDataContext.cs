@@ -40,8 +40,14 @@ public class IntegrationDbContext :
         modelBuilder.Entity<WithMisNamedQueryParentEntity>();
         modelBuilder.Entity<WithMisNamedQueryChildEntity>();
         modelBuilder.Entity<Level1Entity>();
-        modelBuilder.Entity<Level2Entity>();
-        modelBuilder.Entity<Level3Entity>();
+        modelBuilder.Entity<Level2Entity>()
+            .HasOne(p => p.Level1Entity)
+            .WithOne(i => i.Level2Entity)
+            .HasForeignKey<Level1Entity>(b => b.Level2EntityId);
+        modelBuilder.Entity<Level3Entity>()
+            .HasOne(p => p.Level2Entity)
+            .WithOne(i => i.Level3Entity)
+            .HasForeignKey<Level2Entity>(b => b.Level3EntityId);
         modelBuilder.Entity<WithManyChildrenEntity>();
         modelBuilder.Entity<Child1Entity>();
         modelBuilder.Entity<NamedIdEntity>();
