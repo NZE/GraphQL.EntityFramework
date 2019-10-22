@@ -3,6 +3,6 @@
 public class IncludeNonQueryableA
 {
     public Guid Id { get; set; } = XunitLogging.Context.NextGuid();
-    public Guid Level1EntityId { get; set; }
-    public Level1Entity Level1Entity { get; set; } = null!;
+    public Guid IncludeNonQueryableBId { get; set; }
+    public IncludeNonQueryableB IncludeNonQueryableB { get; set; } = null!;
 }

@@ -26,8 +26,8 @@ public partial class IntegrationTests :
         GraphTypeTypeRegistry.Register<Child1Entity, Child1Graph>();
         GraphTypeTypeRegistry.Register<ChildEntity, ChildGraph>();
         GraphTypeTypeRegistry.Register<ParentEntity, ParentGraph>();
-        GraphTypeTypeRegistry.Register<Level1Entity, Level1Graph>();
-        GraphTypeTypeRegistry.Register<IncludeNonQueryableA, Level2Graph>();
+        GraphTypeTypeRegistry.Register<IncludeNonQueryableB, IncludeNonQueryableBGraph>();
+        GraphTypeTypeRegistry.Register<IncludeNonQueryableA, IncludeNonQueryableAGraph>();
         GraphTypeTypeRegistry.Register<WithMisNamedQueryParentEntity, WithMisNamedQueryParentGraph>();
         GraphTypeTypeRegistry.Register<WithNullableEntity, WithNullableGraph>();
         GraphTypeTypeRegistry.Register<NamedIdEntity, NamedIdGraph>();
@@ -915,9 +915,9 @@ query ($id: String!)
     {
         var query = @"
 {
-  includeNonQueryable
+  field
   {
-    level1Entity
+    includeNonQueryableB
     {
       id
     }
@@ -925,7 +925,7 @@ query ($id: String!)
 }";
 
         var level2 = new IncludeNonQueryableA();
-        var level1 = new Level1Entity
+        var level1 = new IncludeNonQueryableB
         {
             IncludeNonQueryableA = level2,
         };

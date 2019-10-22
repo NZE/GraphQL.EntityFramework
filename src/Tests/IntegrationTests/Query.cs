@@ -15,16 +15,16 @@ public class Query :
             name: "manyChildren",
             resolve: context => context.DbContext.WithManyChildrenEntities);
         AddQueryField(
-            name: "includeNonQueryable",
+            name: "field",
             resolve: context =>
             {
                 var dataContext = context.DbContext;
-                return dataContext.Level1Entities.AsQueryable()
+                return dataContext.IncludeNonQueryableBs.AsQueryable()
                     .Select(p => p.IncludeNonQueryableA);
             });
         AddQueryField(
             name: "level1Entities",
-            resolve: context => context.DbContext.Level1Entities);
+            resolve: context => context.DbContext.IncludeNonQueryableBs);
 
         AddQueryField(
             name: "withNullableEntities",
